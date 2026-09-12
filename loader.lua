@@ -53,15 +53,20 @@ end
 local function xor_decode(s)
     local out = {}
     for i = 1,#s do
-        out[i] = string.char(string.byte(s,i) ~ XOR_KEY[(i-1)%#XOR_KEY+1])
+        out[i] = string.char(bit32.bxor(string.byte(s,i), XOR_KEY[(i-1)%#XOR_KEY+1]))
     end
     return table.concat(out)
 end
 
-local function decode(e)   return xor_decode(b64_decode(e)) end
+local function decode(e)
+    return xor_decode(b64_decode(e))
+end
+
 local function fnv1a(s)
     local h = 0x811C9DC5
-    for i = 1,#s do h = (h~string.byte(s,i))*0x01000193%0x100000000 end
+    for i = 1,#s do
+        h = bit32.band((bit32.bxor(h, string.byte(s,i)) * 0x01000193), 0xFFFFFFFF)
+    end
     return h
 end
 
@@ -69,13 +74,15 @@ local RAW     = decode("JCE1Ijx5ZHw+NDZ8KCo/Ozk3NCEqMSg8IiEkPDttKDwheiszJCZ6YH5g
 local SCRIPTS = {[7709344486] = decode("PzYzOz83OHw8JyghIC0nOiowbz46Ig==")}
 local HASHES  = {raw = fnv1a(RAW), [7709344486] = fnv1a(SCRIPTS[7709344486])}
 
-local function verified(v,e) return fnv1a(v)==e end
+local function verified(v,e)
+    return fnv1a(v)==e
+end
 
 local function run()
-    local file = SCRIPTS[game.PlaceId]
+    local file = SCRIPTS[game.GameId]
     if not file then return end
     if not verified(RAW,HASHES.raw) then return end
-    if not verified(file,HASHES[game.PlaceId]) then return end
+    if not verified(file,HASHES[game.GameId]) then return end
     local ok,src = pcall(function() return game:HttpGet(RAW..file) end)
     if not ok or not src or src=="" then return end
     local fn = loadstring(src)
@@ -83,6 +90,9 @@ local function run()
     fn()
 end
 
-local co = coroutine.create(function() coroutine.yield() run() end)
+local co = coroutine.create(function()
+    coroutine.yield()
+    run()
+end)
 coroutine.resume(co)
 coroutine.resume(co)
